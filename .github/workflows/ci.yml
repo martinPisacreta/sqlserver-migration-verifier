@@ -11,3 +11,17 @@ jobs:
         with:
           dotnet-version: '8.0.x'
       - run: dotnet build -c Release
+
+  scenarios:
+    # Applies the four README scenarios to a throwaway LocalDB instance on the runner and
+    # fails unless the verifier exits 0, 1, 1, 1. The run summary shows the table and the reports.
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - run: dotnet build -c Release
+      - name: Four scenarios on LocalDB (expected exit codes 0, 1, 1, 1)
+        shell: pwsh
+        run: ./ci/run-scenarios.ps1
