@@ -86,9 +86,13 @@ This tool is intended for small and medium tables. It scans both sides and retai
 
 The two database snapshots are independent, not a coordinated cross-database instant. Pause writes before acceptance. SHA-256 equality is probabilistic evidence. The comparison does not validate omitted tables, foreign keys, indexes, defaults, identity settings, triggers, procedures, permissions or application behavior. Matching the checked metadata is not a complete schema audit.
 
-The included CI workflow builds the project on .NET 8; it does not run SQL Server or database scenarios.
+## Using it as a release check
+
+The exit code makes the verifier usable as a gate: run it after the data load of a migration or release step and stop the pipeline unless it returns 0. ci/run-scenarios.ps1 is a working example. It creates a throwaway LocalDB instance, applies the four scenarios, checks that the verifier exits 0, 1, 1, 1, and deletes the instance.
+
+The included CI workflow builds the project on .NET 8 and runs that script on a Windows runner on every push. The run summary shows the exit-code table and the four reports. That run covers the example databases only; it says nothing about very large tables or databases on different servers.
 
 ## Need this done for your migration?
 
-Request verification of your selected SQL Server tables and a report of the observed differences.
+Request verification of your selected SQL Server tables and a report of the observed differences, or the same check wired into your release process as a pass or fail step.
 https://www.upwork.com/freelancers/~014a89dccd8bf740d0
